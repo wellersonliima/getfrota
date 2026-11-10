@@ -407,6 +407,10 @@ public class Main {
         rotas.add(rota2);
         rotas.add(rota3);
 
+        carreta1.registrarAbastecimento(LocalDate.of(2026, 11, 8),76200,50,300);
+
+        carreta1.exibirDados();
+
         Scanner leia = new Scanner(System.in);
         int opcaoPrincipal = -1;
 

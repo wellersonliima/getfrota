@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 public class Veiculo {
     private String placa;
     private String modelo;
@@ -6,6 +9,7 @@ public class Veiculo {
     private double kmUltimaPreventiva;
     private static final double INTERVALO_PREVENTIVA_KM = 10000;
     private SituacaoVeiculo situacao;
+    private ArrayList<Abastecimento> historico = new ArrayList<>();
 
     Veiculo(String placa, String modelo, int ano, double quilometragem, double kmUltimaPreventiva) {
         this.placa = placa;
@@ -53,6 +57,10 @@ public class Veiculo {
         return situacao;
     }
 
+    public ArrayList<Abastecimento> getHistorico(){
+        return historico;
+    }
+
     public boolean podeSerAssociadoARota() {
         return situacao == SituacaoVeiculo.DISPONIVEL && !preventivaVencida();
     }
@@ -67,6 +75,22 @@ public class Veiculo {
         }
 
     }
+
+    public boolean registrarAbastecimento(LocalDate data, double km, double litros, double valor){
+        if(data.isAfter(LocalDate.now())){
+            return false;
+        }
+        if(litros <= 0 || valor < 0){
+            return false;
+        }
+        if(km < quilometragem){
+            return false;
+        }
+        historico.add(new Abastecimento(data, km, litros, valor));
+        quilometragem = km;
+        return true;
+    }
+
 
     public void exibirDados() {
         System.out.println(placa + " - " + modelo + " (" + ano + ")" + " - " + quilometragem + " km" + " - " + "Preventiva: "

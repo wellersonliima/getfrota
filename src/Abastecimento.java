@@ -3,9 +3,9 @@ import java.time.LocalDate;
 
 public class Abastecimento {
     private LocalDate data;
-    double quilometragem;
-    double litros;
-    double valor;
+    private double quilometragem;
+    private double litros;
+    private double valor;
 
     Abastecimento(LocalDate data, double quilometragem, double litros, double valor){
         this.data = data;

@@ -46,6 +46,7 @@ public class Main {
             System.out.println("1 - Cadastrar veículo");
             System.out.println("2 - Listar todos");
             System.out.println("3 - Listar os aptos para rota");
+            System.out.println("4 - Registrar abastecimento");
             System.out.println("0 - Voltar ao menu principal");
             opcaoVeiculo = lerInt(leia, "Digite a opção desejada: ");
 
@@ -58,6 +59,9 @@ public class Main {
                     break;
                 case 3:
                     listarVeiculosAptos(garagem);
+                    break;
+                case 4:
+                    registrarAbastecimento(garagem, leia);
                     break;
                 case 0:
                     System.out.println("Retornando ao menu principal...\n");
@@ -91,8 +95,8 @@ public class Main {
             System.out.println("Ano de fabricação inferior ao limite estabelecido nas normas da empresa.");
             return;
         }
-        if(ano == LocalDate.now().getYear() + 1){
-            System.out.println("Ano superior ao ano vigênte, gentileza verificar.");
+        if(ano > LocalDate.now().getYear() + 1){
+            System.out.println("Ano superior ao ano vigente, gentileza verificar.");
             return;
         }
 
@@ -130,6 +134,50 @@ public class Main {
             if (v.podeSerAssociadoARota()) {
                 v.exibirDados();
             }
+        }
+    }
+    static void registrarAbastecimento(ArrayList<Veiculo> garagem, Scanner leia){
+        System.out.print("Informe a placa: ");
+        String placa = leia.nextLine();
+        if(placa.isBlank()){
+            System.out.println("Campo vazio, gentileza verificar.");
+            return;
+        }
+        Veiculo v = buscarVeiculoPorPlaca(garagem, placa);
+        if(v == null){
+            System.out.println("Placa não encontrada!");
+            return;
+        }
+
+        LocalDate data =  lerData(leia, "Informe a data do abastecimento: ");
+
+        double quilometragem = lerDouble(leia, "Informe a quilometragem: ");
+
+        double litros = lerDouble(leia, "Informe a quantidade de litros abastecidos: ");
+
+        double valor = lerDouble(leia, "Informe o valor R$: ");
+
+        v.registrarAbastecimento(data, quilometragem, litros, valor);
+        System.out.println("Abastecimento registrado com sucesso!");
+
+
+    }
+    static void listarAbastecimentos(ArrayList<Veiculo> garagem, ArrayList<Abastecimento> historico, Scanner leia){
+        System.out.print("Informe a placa: ");
+        String placa = leia.nextLine();
+        if(placa.isBlank()){
+            System.out.println("Campo vazio, gentileza verificar.");
+            return;
+        }
+        Veiculo v = buscarVeiculoPorPlaca(garagem, placa);
+        if(v == null){
+            System.out.println("Placa não encontrada!");
+            return;
+        }
+
+        for (int i = 0; i < garagem.size(); i++) {
+            v = garagem.get(i);
+
         }
     }
 
@@ -407,7 +455,7 @@ public class Main {
         rotas.add(rota2);
         rotas.add(rota3);
 
-        carreta1.registrarAbastecimento(LocalDate.of(2026, 11, 8),76200,50,300);
+        carreta1.registrarAbastecimento(LocalDate.of(2026, 11, 8),80100,50,300);
 
         carreta1.exibirDados();
 

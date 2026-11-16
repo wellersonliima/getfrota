@@ -1,4 +1,3 @@
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Abastecimento {
@@ -31,6 +30,6 @@ public class Abastecimento {
         System.out.println("Data do abastecimento: " + data + " - " +
                            "Quilometragem: " + quilometragem + " - " +
                            "Litros: " + litros + " - " +
-                           "Valor R$: " + valor);
+                           "Valor R$: " + valor + "\n");
     }
 }

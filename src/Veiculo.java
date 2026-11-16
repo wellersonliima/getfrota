@@ -88,6 +88,9 @@ public class Veiculo {
         }
         historico.add(new Abastecimento(data, km, litros, valor));
         quilometragem = km;
+        if(preventivaVencida()){
+            situacao = SituacaoVeiculo.MANUTENCAO_PENDENTE;
+        }
         return true;
     }
 

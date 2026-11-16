@@ -47,6 +47,7 @@ public class Main {
             System.out.println("2 - Listar todos");
             System.out.println("3 - Listar os aptos para rota");
             System.out.println("4 - Registrar abastecimento");
+            System.out.println("5 - Listar abastecimento do veículo");
             System.out.println("0 - Voltar ao menu principal");
             opcaoVeiculo = lerInt(leia, "Digite a opção desejada: ");
 
@@ -62,6 +63,9 @@ public class Main {
                     break;
                 case 4:
                     registrarAbastecimento(garagem, leia);
+                    break;
+                case 5:
+                    listarAbastecimentos(garagem, leia);
                     break;
                 case 0:
                     System.out.println("Retornando ao menu principal...\n");
@@ -157,12 +161,15 @@ public class Main {
 
         double valor = lerDouble(leia, "Informe o valor R$: ");
 
-        v.registrarAbastecimento(data, quilometragem, litros, valor);
-        System.out.println("Abastecimento registrado com sucesso!");
+        if(v.registrarAbastecimento(data, quilometragem, litros, valor)) {
+            System.out.println("Abastecimento registrado com sucesso!");
+        }else {
+            System.out.println("Não foi possível registrar o abastecimento, verifique os dados inseridos.");
+        }
 
 
     }
-    static void listarAbastecimentos(ArrayList<Veiculo> garagem, ArrayList<Abastecimento> historico, Scanner leia){
+    static void listarAbastecimentos(ArrayList<Veiculo> garagem, Scanner leia){
         System.out.print("Informe a placa: ");
         String placa = leia.nextLine();
         if(placa.isBlank()){
@@ -174,9 +181,13 @@ public class Main {
             System.out.println("Placa não encontrada!");
             return;
         }
-
-        for (int i = 0; i < garagem.size(); i++) {
-            v = garagem.get(i);
+        ArrayList<Abastecimento> historico = v.getHistorico();
+        if(historico.isEmpty()){
+            System.out.println("Nenhum histórico de abastecimento para o veículo solicitado.");
+            return;
+        }
+        for (int i = 0; i < historico.size(); i++) {
+            historico.get(i).exibirDados();
 
         }
     }
@@ -454,10 +465,6 @@ public class Main {
         rotas.add(rota1);
         rotas.add(rota2);
         rotas.add(rota3);
-
-        carreta1.registrarAbastecimento(LocalDate.of(2026, 11, 8),80100,50,300);
-
-        carreta1.exibirDados();
 
         Scanner leia = new Scanner(System.in);
         int opcaoPrincipal = -1;

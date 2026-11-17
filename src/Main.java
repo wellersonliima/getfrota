@@ -48,6 +48,7 @@ public class Main {
             System.out.println("3 - Listar os aptos para rota");
             System.out.println("4 - Registrar abastecimento");
             System.out.println("5 - Listar abastecimento do veículo");
+            System.out.println("6 - Consultar consumo médio");
             System.out.println("0 - Voltar ao menu principal");
             opcaoVeiculo = lerInt(leia, "Digite a opção desejada: ");
 
@@ -66,6 +67,9 @@ public class Main {
                     break;
                 case 5:
                     listarAbastecimentos(garagem, leia);
+                    break;
+                case 6:
+                    consultarConsumo(garagem, leia);
                     break;
                 case 0:
                     System.out.println("Retornando ao menu principal...\n");
@@ -190,6 +194,26 @@ public class Main {
             historico.get(i).exibirDados();
 
         }
+    }
+    static void consultarConsumo(ArrayList<Veiculo> garagem, Scanner leia){
+        System.out.print("Informe a placa: ");
+        String placa = leia.nextLine();
+        if(placa.isBlank()){
+            System.out.println("Campo vazio, gentileza verificar.");
+            return;
+        }
+        Veiculo v = buscarVeiculoPorPlaca(garagem, placa);
+        if (v == null){
+            System.out.println("Placa não encontrada!");
+            return;
+        }
+        if(!v.temConsumoMedio()){
+            System.out.println("Histórico insuficiente (mínimo de 2 abastecimentos)");
+        }else {
+            System.out.printf("Consumo médio: %.2f km/l%n", v.calcularConsumoMedio());
+        }
+
+
     }
 
     static void menuMotoristas(ArrayList<Motorista> motoristas, Scanner leia) {

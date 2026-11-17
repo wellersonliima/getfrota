@@ -94,6 +94,22 @@ public class Veiculo {
         return true;
     }
 
+    public boolean temConsumoMedio(){
+        return historico.size() >= 2;
+    }
+
+    public double calcularConsumoMedio(){
+        double acumulador = 0;
+        if(!temConsumoMedio()){
+            return 0;
+        }
+        double distancia = historico.get(historico.size() - 1).getQuilometragem() - historico.get(0).getQuilometragem();
+        for (int i = 1; i < historico.size(); i++) {
+            acumulador += historico.get(i).getLitros();
+        }
+        return distancia / acumulador;
+    }
+
 
     public void exibirDados() {
         System.out.println(placa + " - " + modelo + " (" + ano + ")" + " - " + quilometragem + " km" + " - " + "Preventiva: "

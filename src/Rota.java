@@ -82,6 +82,18 @@ public class Rota {
         return true;
     }
 
+    public boolean temConsumoPrevisto(){
+        return veiculo != null && veiculo.temConsumoMedio() && veiculo.calcularConsumoMedio() > 0;
+    }
+    public double calcularConsumoPrevisto(){
+        if(!temConsumoPrevisto()){
+            return 0;
+        }else {
+            return distanciaKm / veiculo.calcularConsumoMedio();
+        }
+
+    }
+
     public void exibirDados() {
         System.out.println("Origem: " + origem + " - " + "Destino: " + destino + " - " + distanciaKm + "km - " + "Status: " + statusRota);
         if (veiculo != null) {
@@ -89,6 +101,11 @@ public class Rota {
                     "Motorista: " + motorista.getNome() + "\n");
         } else {
             System.out.println("Veículo e motorista: não associados\n");
+        }
+        if(temConsumoPrevisto()){
+            System.out.printf("Consumo previsto para a viagem: %.1f litros%n", calcularConsumoPrevisto());
+        }else {
+            System.out.println("Consumo previsto indisponível.");
         }
     }
 }

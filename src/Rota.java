@@ -5,6 +5,9 @@ public class Rota {
     private Veiculo veiculo;
     private Motorista motorista;
     private StatusRota statusRota;
+    private double litrosPrevistos;
+    private double litrosRealizados;
+    private static final double LIMITE_GAP_PERCENTUAL = 10;
 
     Rota(String origem, String destino, double distanciaKm) {
         this.origem = origem;
@@ -37,6 +40,14 @@ public class Rota {
         return statusRota;
     }
 
+    public double getLitrosPrevistos(){
+        return litrosPrevistos;
+    }
+
+    public double getLitrosRealizados(){
+        return litrosRealizados;
+    }
+
     public boolean associarRecursos(Veiculo v, Motorista m) {
         if (statusRota != StatusRota.EM_PLANEJAMENTO) {
             return false;
@@ -63,6 +74,7 @@ public class Rota {
         veiculo.setSituacao(SituacaoVeiculo.EM_ROTA);
         motorista.setSituacao(SituacaoMotorista.EM_VIAGEM);
         statusRota = StatusRota.EM_EXECUCAO;
+        litrosPrevistos = calcularConsumoPrevisto();
 
         return true;
     }
@@ -85,6 +97,7 @@ public class Rota {
     public boolean temConsumoPrevisto(){
         return veiculo != null && veiculo.temConsumoMedio() && veiculo.calcularConsumoMedio() > 0;
     }
+
     public double calcularConsumoPrevisto(){
         if(!temConsumoPrevisto()){
             return 0;
@@ -92,6 +105,29 @@ public class Rota {
             return distanciaKm / veiculo.calcularConsumoMedio();
         }
 
+    }
+
+    public boolean registrarConsumoRealizado(double litros){
+        if(statusRota != StatusRota.CONCLUIDA){
+            return false;
+        }
+        if(litros <= 0){
+            return false;
+        }
+        litrosRealizados = litros;
+
+        return true;
+    }
+
+    public double calcularDiferencaPercentual(){
+        if(litrosPrevistos == 0 || litrosRealizados == 0){
+            return 0;
+        }
+        return Math.abs(litrosRealizados - litrosPrevistos) / litrosPrevistos * 100;
+    }
+
+    public boolean temGap(){
+        return calcularDiferencaPercentual() > LIMITE_GAP_PERCENTUAL;
     }
 
     public void exibirDados() {

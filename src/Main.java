@@ -171,7 +171,6 @@ public class Main {
             System.out.println("Não foi possível registrar o abastecimento, verifique os dados inseridos.");
         }
 
-
     }
     static void listarAbastecimentos(ArrayList<Veiculo> garagem, Scanner leia){
         System.out.print("Informe a placa: ");
@@ -212,7 +211,6 @@ public class Main {
         }else {
             System.out.printf("Consumo médio: %.2f km/l%n", v.calcularConsumoMedio());
         }
-
 
     }
 
@@ -304,6 +302,7 @@ public class Main {
             System.out.println("3 - Associar recursos a rota");
             System.out.println("4 - Iniciar rota");
             System.out.println("5 - Finalizar rota");
+            System.out.println("6 - Registrar consumo realizado");
             System.out.println("0 - Voltar ao menu principal");
             opcaoRotas = lerInt(leia, "Digite a opção desejada: ");
 
@@ -322,6 +321,9 @@ public class Main {
                     break;
                 case 5:
                     finalizarRota(rotas, leia);
+                    break;
+                case 6:
+                    registrarConsumoRealizado(rotas, leia);
                     break;
                 case 0:
                     System.out.println("Retornando ao menu principal...\n");
@@ -406,7 +408,6 @@ public class Main {
             System.out.println("Veículo ou motorista indisponível (situação, preventiva ou CNH)");
         }
 
-
     }
     static void iniciarRota(ArrayList<Rota> rotas, Scanner leia) {
         Rota r = escolherRota(rotas, leia);
@@ -438,6 +439,23 @@ public class Main {
         }
         return rotas.get(numRota - 1);
     }
+    static void registrarConsumoRealizado(ArrayList<Rota> rotas, Scanner leia){
+        Rota r = escolherRota(rotas, leia);
+        if(r == null){
+            return;
+        }
+        double litros = lerDouble(leia, "Informe os litros: ");
+
+        if((r.registrarConsumoRealizado(litros))){
+            System.out.printf("Consumo previsto: %.1f | Consumo realizado: %.1f | Diferença: %.1f%% \n",
+                    r.getLitrosPrevistos() , r.getLitrosRealizados(), r.calcularDiferencaPercentual());
+            if(r.temGap()){
+                System.out.println("Gap operacional detectado!\n");
+            }
+        }else{
+            System.out.println("Falha ao registrar o consumo.");
+        }
+    }
     static Veiculo buscarVeiculoPorPlaca(ArrayList<Veiculo> garagem, String placa) {
         for (int i = 0; i < garagem.size(); i++) {
             Veiculo v = garagem.get(i);
@@ -457,14 +475,13 @@ public class Main {
         return null;
     }
 
-
     public static void main(String[] args) {
         Veiculo carreta1 = new Veiculo("RJS9A00", "Volvo", 2026, 76000, 70000);
         Veiculo carreta2 = new Veiculo("LTA1012", "Mercedes", 2018, 82000, 70000);
         Veiculo carreta3 = new Veiculo("LUL4A26", "MarcoPolo", 2026, 30000, 28000);
         Veiculo carreta4 = new Veiculo("LPL9X20", "AUDIO", 2026, 79800, 70000);
 
-        Motorista motorista1 = new Motorista("Jorel", "16473707794", "D", LocalDate.of(2026, 12, 10));
+        Motorista motorista1 = new Motorista("Jorel", "16473707794", "D", LocalDate.of(2030, 12, 10));
         Motorista motorista2 = new Motorista("Lima", "18206902063", "E", LocalDate.of(2032, 9, 5));
         Motorista motorista3 = new Motorista("Caio", "17804406934", "E", LocalDate.of(2030, 1, 1));
         Motorista motorista4 = new Motorista("José", "17800698934", "E", LocalDate.of(2024, 1, 1));
@@ -472,6 +489,10 @@ public class Main {
         Rota rota1 = new Rota("São Paulo", "Rio de Janeiro", 430);
         Rota rota2 = new Rota("Bahia", "Foz do Iguaçu", 930);
         Rota rota3 = new Rota("Amapá", "Rio Grande do Sul", 430);
+
+        carreta1.registrarAbastecimento(LocalDate.of(2026, 11, 1), 76200, 50, 300);
+        carreta1.registrarAbastecimento(LocalDate.of(2026, 11, 5), 76700, 60, 360);
+        carreta1.registrarAbastecimento(LocalDate.of(2026, 11, 10), 77300, 70, 420);
 
         ArrayList<Veiculo> garagem = new ArrayList<>();
         garagem.add(carreta1);
